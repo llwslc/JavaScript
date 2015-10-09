@@ -1,7 +1,3 @@
-# Pomelo
-
-## Pomelo.docx
-
 ### 搭建Pomelo
 * 安装 python
 * 安装 vs2010
@@ -11,10 +7,12 @@
 * 安装 node-gyp
 * 安装 msnodesql
 * 安装 SQL Server Native Client 11.0
+* 安装 MongoDB
+* 安装 Mongoose
 
 ### 配置数据库
-* 安装数据库
-* 实例配置
+* SQL Server
+* MongoDB
 
 ### 创建Pomelo
 * 本地新建目录
@@ -36,6 +34,8 @@
 * 添加节点
 * handle节点
 * remote节点
+* lifecycle
+* filter
 
 ### 主要语法
 * 变量
@@ -50,10 +50,21 @@
 
 ### 定时器任务
 
-### 数据库驱动
-
-### WebStorm
+### 数据库CRUD
+* SQL Server
+* MongoDB
 
 ### 异步处理
 
+### 加密解密
+
+### 数据压缩
+
+### 充值计费
+
+### Sublime
+* 插件
+* 快捷键
+
+### WebStorm
 
