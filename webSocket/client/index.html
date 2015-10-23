@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>websocket - chatRoom</title>
+    <script src="./wsClient.js"></script>
+    <script>
+    function wsInit()
+    {
+        var nameInp = document.getElementById("nameInput");
+        var linkBtn = document.getElementById("linkButton");
+        var closeBtn = document.getElementById("closeButton");
+        var sendMsg = document.getElementById("sendMessage");
+        var sendBtn = document.getElementById("sendButton");
+        var allMsg = document.getElementById("allMessage");
+        var clearBtn = document.getElementById("clearButton");
+        var nameStr = nameInp.value;
+        if (nameStr === "")
+        {
+            alert("需要输入昵称")
+        }
+        else
+        {
+            nameInp.disabled = true;
+            linkBtn.disabled = true;
+            closeBtn.disabled = false;
+            sendMsg.disabled = false;
+            sendBtn.disabled = false;
+            allMsg.disabled = false;
+            clearBtn.disabled = false;
+            wsClient.wsInit(nameStr);
+        }
+    };
+    function wsClose()
+    {
+        var nameInp = document.getElementById("nameInput");
+        var linkBtn = document.getElementById("linkButton");
+        var closeBtn = document.getElementById("closeButton");
+        var sendMsg = document.getElementById("sendMessage");
+        var sendBtn = document.getElementById("sendButton");
+        var allMsg = document.getElementById("allMessage");
+        var clearBtn = document.getElementById("clearButton");
+
+        nameInp.disabled = false;
+        linkBtn.disabled = false;
+        closeBtn.disabled = false;
+        sendMsg.disabled = true;
+        sendBtn.disabled = true;
+        allMsg.disabled = true;
+        clearBtn.disabled = true;
+        wsClient.close();
+    };
+    function wsSend()
+    {
+        var sendMsg = document.getElementById("sendMessage");
+        var allMsg = document.getElementById("allMessage");
+        var msgStr = sendMsg.value;
+        if (msgStr !== "")
+        {
+            allMsg.value += "我说: " + msgStr + "\n";
+            wsClient.sendMsg(msgStr);
+        }
+    };
+    function wsRecv(msgStr)
+    {
+        var allMsg = document.getElementById("allMessage");
+        if (msgStr !== "")
+        {
+            allMsg.value += msgStr + "\n";
+        }
+    };
+    function clearAllMsg()
+    {
+        var allMsg = document.getElementById("allMessage");
+        allMsg.value = "";
+    };
+    </script>
+
+</head>
+<body>
+    <h1>websocket - Simple chat room</h1>
+    <div>
+    <span id="playerName">昵称: </span>
+    <input type="text" id="nameInput"/>
+    <button type="button" id="linkButton" onclick="wsInit()">连接服务器</button>
+    <button type="button" id="closeButton" onclick="wsClose()">断开服务器</button>
+    </div>
+    <br />
+
+    <div>
+    <textarea id="sendMessage" style="width:100%" disabled="disabled"></textarea>
+    </div>
+    <div>
+    <button type="button" id="sendButton" disabled="disabled" onclick="wsSend()">发送信息</button>
+    </div>
+    <br />
+
+    <div>
+    <textarea id="allMessage" style="width:100%; height:200px" disabled="disabled"></textarea>
+    </div>
+    <div>
+    <button type="button" id="clearButton" disabled="disabled" onclick="clearAllMsg()">清空</button>
+    </div>
+    <div id="content"></div>
+</body>
+</html>
