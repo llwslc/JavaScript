@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>websocket - chatRoom</title>
+    <script src="./jquery-2.1.4.min.js"></script>
+    <script src="./postFile.js"></script>
+    <script>
+    function postFile()
+    {
+        var fileInp = document.getElementById("fileInput");
+        var pathStr = fileInp.value;
+        if (pathStr === "")
+        {
+            alert(pathStr)
+        }
+        else
+        {
+            alert(pathStr)
+        }
+    };
+    </script>
+
+</head>
+<body>
+    <h1>postFile</h1>
+    <div>
+    <input type="file" id="fileInput" accept="image/*" />
+    </div>
+    <br />
+    <div>
+    <button type="submit" id="postButton" onclick="postFile()">上传</button>
+    </div>
+    <div id="content"></div>
+</body>
+</html>
