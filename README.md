@@ -7,4 +7,4 @@
 
 ## [postFile](https://github.com/llwslc/Node.js/tree/master/postFile)
 
-## [addons/](https://github.com/llwslc/Node.js/tree/master/addons)
+## [addons](https://github.com/llwslc/Node.js/tree/master/addons)

@@ -40,7 +40,7 @@ NAN_METHOD(RunCallback)
   Local<Value> argv[argc] = { Nan::New("hello world").ToLocalChecked() };
   cb->Call(Nan::Null(), argc, argv);
 
-  info.GetReturnValue().Set(Nan::New("runCallBackOver").ToLocalChecked());
+  info.GetReturnValue().Set(Nan::New("RunCallback").ToLocalChecked());
   info.GetReturnValue().Set(info[0]);
 }
 
@@ -59,13 +59,17 @@ NAN_METHOD(TestType)
 
   i++;
   if (info[i]->IsArray()) {
-    std::cout << "parame " << i << " is array: [";
+    std::cout << "parame " << i << " is array: [ ";
     for (int j = 0; j < info[i]->ToObject()->Get(Nan::New("length").ToLocalChecked())->NumberValue(); ++j)
     {
+      if (j != 0)
+      {
+        std::cout << ", ";
+      }
       std::string tempString(*Nan::Utf8String(info[i]->ToObject()->Get(j)->ToString()));
-      std::cout << tempString << ",";
+      std::cout << tempString;
     }
-    std::cout << "]" << std::endl;
+    std::cout << " ]" << std::endl;
   }
 
   i++;
@@ -80,12 +84,45 @@ NAN_METHOD(TestType)
   info.GetReturnValue().Set(Nan::New("TestType").ToLocalChecked());
 }
 
+NAN_METHOD(ReturnString)
+{
+  info.GetReturnValue().Set(Nan::New("String").ToLocalChecked());
+}
+
+NAN_METHOD(ReturnNumber)
+{
+  info.GetReturnValue().Set(Nan::New(9999));
+}
+
+NAN_METHOD(ReturnArray)
+{
+  Local<Array> v8Array = Nan::New<Array>();
+  v8Array->Set(0, Nan::New("string").ToLocalChecked());
+  v8Array->Set(1, Nan::New(1));
+  v8Array->Set(2, Nan::New(0.5));
+
+  info.GetReturnValue().Set(v8Array);
+}
+
+NAN_METHOD(ReturnJson)
+{
+  Local<Object> v8Object = Nan::New<Object>();
+  v8Object->Set(Nan::New("key").ToLocalChecked(), Nan::New("value").ToLocalChecked());
+  v8Object->Set(1, Nan::New("num").ToLocalChecked());
+
+  info.GetReturnValue().Set(v8Object);
+}
+
 
 void init(Handle<Object> exports) {
   Nan::SetMethod(exports, "hello", Hello);
   Nan::SetMethod(exports, "add", Add);
   Nan::SetMethod(exports, "runcb", RunCallback);
   Nan::SetMethod(exports, "testType", TestType);
+  Nan::SetMethod(exports, "returnStr", ReturnString);
+  Nan::SetMethod(exports, "returnNum", ReturnNumber);
+  Nan::SetMethod(exports, "returnArr", ReturnArray);
+  Nan::SetMethod(exports, "returnObj", ReturnJson);
 }
 
 NODE_MODULE(addon, init)
