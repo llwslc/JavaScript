@@ -1,8 +1,6 @@
 var dsp = require("./build/Release/testAddons.node")
 
 
-
-
 console.log(dsp.hello());
 console.log("-----------------");
 console.log(dsp.add(1, 1));

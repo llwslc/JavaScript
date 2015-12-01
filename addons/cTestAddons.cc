@@ -11,7 +11,6 @@ NAN_METHOD(Hello)
   info.GetReturnValue().Set(Nan::New("world").ToLocalChecked());
 }
 
-
 NAN_METHOD(Add)
 {
   if (info.Length() < 2) {
@@ -113,8 +112,7 @@ NAN_METHOD(ReturnJson)
   info.GetReturnValue().Set(v8Object);
 }
 
-
-void init(Handle<Object> exports) {
+void Init(Local<Object> exports) {
   Nan::SetMethod(exports, "hello", Hello);
   Nan::SetMethod(exports, "add", Add);
   Nan::SetMethod(exports, "runcb", RunCallback);
@@ -125,4 +123,4 @@ void init(Handle<Object> exports) {
   Nan::SetMethod(exports, "returnObj", ReturnJson);
 }
 
-NODE_MODULE(addon, init)
+NODE_MODULE(addon, Init)
