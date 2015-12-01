@@ -1,0 +1,14 @@
+{
+  "name": "testAddons",
+  "description": "testAddons",
+  "keywords": [
+    "Addons"
+  ],
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=0.12.x"
+  },
+  "dependencies": {
+    "nan": ">=2.1.0"
+  }
+}
