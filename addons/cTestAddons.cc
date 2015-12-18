@@ -51,6 +51,16 @@ NAN_METHOD(TestType)
   }
 
   i++;
+  if (info[i]->IsNumber()) {
+    std::cout << "parame " << i << " is number: " << info[i]->NumberValue() << std::endl;
+  }
+
+  i++;
+  if (info[i]->IsBoolean()) {
+    std::cout << "parame " << i << " is boolean: " << (info[i]->BooleanValue() ? "true" : "false") << std::endl;
+  }
+
+  i++;
   if (info[i]->IsString()) {
     std::string tempString(*Nan::Utf8String(info[i]->ToString()));
     std::cout << "parame " << i << " is string: " << tempString << std::endl;
@@ -78,6 +88,11 @@ NAN_METHOD(TestType)
     std::string valString(*Nan::Utf8String(info[i]->ToObject()->Get(Nan::New("hello").ToLocalChecked())));
     std::cout << keyString << ": " << valString;
     std::cout << " }" << std::endl;
+  }
+
+  i++;
+  if (info[i]->IsUndefined()) {
+    std::cout << "parame " << i << " is Undefined" << std::endl;
   }
 
   info.GetReturnValue().Set(Nan::New("TestType").ToLocalChecked());
