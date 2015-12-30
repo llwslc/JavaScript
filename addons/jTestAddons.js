@@ -16,3 +16,8 @@ console.log("=================");
 console.log(dsp.returnArr());
 console.log("-----------------");
 console.log(dsp.returnObj());
+console.log("=================");
+console.log(dsp.runThread());
+console.log("-----------------");
+console.log(dsp.returnGlobal());
+console.log("=================");

@@ -2,6 +2,8 @@
 #include <v8.h>
 
 #include <iostream>
+#include <vector>
+#include <pthread.h>
 
 using namespace v8;
 
@@ -115,6 +117,17 @@ NAN_METHOD(ReturnArray)
   v8Array->Set(1, Nan::New(1));
   v8Array->Set(2, Nan::New(0.5));
 
+  clock_t _start = clock();
+
+  int count = 512 * 512;
+  for (int i = 0; i < count; ++i)
+  {
+    Local<Array> array = Nan::New<Array>();
+  }
+
+  clock_t _end = clock();
+  std::cout << "Nan::New<Array>() time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
   info.GetReturnValue().Set(v8Array);
 }
 
@@ -127,6 +140,68 @@ NAN_METHOD(ReturnJson)
   info.GetReturnValue().Set(v8Object);
 }
 
+
+int myGlobal = 0;
+pthread_mutex_t myMutex = PTHREAD_MUTEX_INITIALIZER;
+void *thread_function(void *arg)
+{
+  int *i = (int*)arg;
+
+  long int wi = 1000;
+  while(wi--){ usleep(1); }
+  printf("Thread says hi! %d\n", *i);
+
+  pthread_mutex_lock(&myMutex);
+  int j = myGlobal;
+  j = j + 1;
+  myGlobal = j;
+  pthread_mutex_unlock(&myMutex);
+
+  return NULL;
+}
+NAN_METHOD(RunThread)
+{
+  pthread_t mythread[10] = {};
+
+  for (int i = 0; i < 10; ++i)
+  {
+    if (pthread_create(&mythread[i], NULL, thread_function, new int(i)))
+    {
+      printf("error creating thread.");
+      abort();
+    }
+  }
+
+  std::cout << "pthread create over | myGlobal = " << myGlobal << std::endl;
+
+  for (int i = 0; i < 10; ++i)
+  {
+    if (pthread_join(mythread[i], NULL))
+    {
+      printf("error joining thread.");
+      abort();
+    }
+  }
+
+  pthread_mutex_lock(&myMutex);
+  int j = myGlobal;
+  j = j + 1;
+  myGlobal = j;
+  pthread_mutex_unlock(&myMutex);
+
+  std::cout << "pthread process over | myGlobal = " << myGlobal << std::endl;
+
+  info.GetReturnValue().Set(Nan::New<Object>());
+}
+
+NAN_METHOD(ReturnGlobal)
+{
+  std::cout << "ReturnGlobal = " << myGlobal << std::endl;
+
+  info.GetReturnValue().Set(Nan::New<Object>());
+}
+
+
 void Init(Local<Object> exports) {
   Nan::SetMethod(exports, "hello", Hello);
   Nan::SetMethod(exports, "add", Add);
@@ -136,6 +211,8 @@ void Init(Local<Object> exports) {
   Nan::SetMethod(exports, "returnNum", ReturnNumber);
   Nan::SetMethod(exports, "returnArr", ReturnArray);
   Nan::SetMethod(exports, "returnObj", ReturnJson);
+  Nan::SetMethod(exports, "runThread", RunThread);
+  Nan::SetMethod(exports, "returnGlobal", ReturnGlobal);
 }
 
 NODE_MODULE(addon, Init)
