@@ -128,6 +128,15 @@ NAN_METHOD(ReturnArray)
   clock_t _end = clock();
   std::cout << "Nan::New<Array>() time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
 
+
+  _start = clock();
+  for (int i = 0; i < count; ++i)
+  {
+    Local<Array> array = Nan::New<Array>(10);
+  }
+  _end = clock();
+  std::cout << "Nan::New<Array>(10) time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
   info.GetReturnValue().Set(v8Array);
 }
 
