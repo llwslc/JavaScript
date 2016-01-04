@@ -112,30 +112,99 @@ NAN_METHOD(ReturnNumber)
 
 NAN_METHOD(ReturnArray)
 {
+  int tempNum = 10000;
   Local<Array> v8Array = Nan::New<Array>();
   v8Array->Set(0, Nan::New("string").ToLocalChecked());
   v8Array->Set(1, Nan::New(1));
   v8Array->Set(2, Nan::New(0.5));
 
-  clock_t _start = clock();
-
-  int count = 512 * 512;
-  for (int i = 0; i < count; ++i)
+  //-------------------------------------------------------------------
   {
-    Local<Array> array = Nan::New<Array>();
+    clock_t _start = clock();
+    int count = 512 * 512;
+    for (int i = 0; i < count; ++i)
+    {
+      Local<Array> array = Nan::New<Array>();
+    }
+
+    clock_t _end = clock();
+    std::cout << "Nan::New<Array>() time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
+
+    _start = clock();
+    for (int i = 0; i < count; ++i)
+    {
+      Local<Array> array = Nan::New<Array>(10);
+    }
+    _end = clock();
+    std::cout << "Nan::New<Array>(10) time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
   }
 
-  clock_t _end = clock();
-  std::cout << "Nan::New<Array>() time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
-
-
-  _start = clock();
-  for (int i = 0; i < count; ++i)
+  //-------------------------------------------------------------------
   {
-    Local<Array> array = Nan::New<Array>(10);
+    clock_t _start = clock();
+    int count = 512 * 512;
+    Local<Array> array1 = Nan::New<Array>();
+    for (int i = 0; i < count; ++i)
+    {
+      array1->Set(i, Nan::New<Number>(tempNum));
+    }
+    clock_t _end = clock();
+    std::cout << "Nan::New<Number>(tempNum) time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
+    _start = clock();
+    Local<Array> array2 = Nan::New<Array>(count);
+    for (int i = 0; i < count; ++i)
+    {
+      array2->Set(i, Nan::New<Number>(tempNum));
+    }
+    _end = clock();
+    std::cout << "Nan::New<Number>(tempNum) with count time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
   }
-  _end = clock();
-  std::cout << "Nan::New<Array>(10) time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
+  //-------------------------------------------------------------------
+  {
+    clock_t _start = clock();
+    int count = 512 * 512;
+    Local<Array> array1 = Nan::New<Array>();
+    for (int i = 0; i < count; ++i)
+    {
+      array1->Set(i, Nan::New<NumberObject>(tempNum));
+    }
+    clock_t _end = clock();
+    std::cout << "Nan::New<NumberObject>(tempNum) time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
+    _start = clock();
+    Local<Array> array2 = Nan::New<Array>(count);
+    for (int i = 0; i < count; ++i)
+    {
+      array2->Set(i, Nan::New<NumberObject>(tempNum));
+    }
+    _end = clock();
+    std::cout << "Nan::New<NumberObject>(tempNum) with count time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+  }
+
+  //-------------------------------------------------------------------
+  {
+    clock_t _start = clock();
+    int count = 512 * 512;
+    Local<Array> array1 = Nan::New<Array>();
+    for (int i = 0; i < count; ++i)
+    {
+      array1->Set(i, Nan::New(tempNum));
+    }
+    clock_t _end = clock();
+    std::cout << "Nan::New(tempNum) time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+
+    _start = clock();
+    Local<Array> array2 = Nan::New<Array>(count);
+    for (int i = 0; i < count; ++i)
+    {
+      array2->Set(i, Nan::New(tempNum));
+    }
+    _end = clock();
+    std::cout << "Nan::New(tempNum) with count time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+  }
 
   info.GetReturnValue().Set(v8Array);
 }
@@ -148,7 +217,6 @@ NAN_METHOD(ReturnJson)
 
   info.GetReturnValue().Set(v8Object);
 }
-
 
 int myGlobal = 0;
 pthread_mutex_t myMutex = PTHREAD_MUTEX_INITIALIZER;
