@@ -206,6 +206,61 @@ NAN_METHOD(ReturnArray)
     std::cout << "Nan::New(tempNum) with count time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
   }
 
+  //-------------------------------------------------------------------
+  {
+    clock_t _start = clock();
+    int count = 512 * 512;
+    int *pArr = new int[count];
+    for (int i = 0; i < count; ++i)
+    {
+      pArr[i] = i;
+    }
+    clock_t _end = clock();
+    std::cout << "new int[count] time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+    delete []pArr;
+
+    _start = clock();
+    Local<Array> array2 = Nan::New<Array>(count);
+    for (int i = 0; i < count; ++i)
+    {
+      array2->Set(i, Nan::New(tempNum));
+    }
+    _end = clock();
+    std::cout << "Nan::New(tempNum) with count time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+  }
+
+  //-------------------------------------------------------------------
+  {
+    int count = 512 * 512;
+    int *pArr = new int[count];
+    for (int i = 0; i < count; ++i)
+    {
+      pArr[i] = i;
+    }
+    clock_t _start = clock();
+    int getNum = 0;
+    for (int i = 0; i < count; ++i)
+    {
+      getNum = pArr[i];
+    }
+    clock_t _end = clock();
+    std::cout << "new int[count] loop time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+    delete []pArr;
+
+    Local<Array> array2 = Nan::New<Array>(count);
+    for (int i = 0; i < count; ++i)
+    {
+      array2->Set(i, Nan::New(tempNum));
+    }
+    _start = clock();
+    for (int i = 0; i < count; ++i)
+    {
+      getNum = array2->Get(i)->NumberValue();
+    }
+    _end = clock();
+    std::cout << "Nan::New(tempNum) with count loop time " << float(_end - _start) / CLOCKS_PER_SEC << " s | count " << count << std::endl;
+  }
+
   info.GetReturnValue().Set(v8Array);
 }
 
