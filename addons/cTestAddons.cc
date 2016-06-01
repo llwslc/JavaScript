@@ -266,9 +266,15 @@ NAN_METHOD(ReturnArray)
 
 NAN_METHOD(ReturnJson)
 {
+  Local<Array> v8Array = Nan::New<Array>();
+  v8Array->Set(0, Nan::New("string").ToLocalChecked());
+  v8Array->Set(1, Nan::New(1));
+  v8Array->Set(2, Nan::New(0.5));
+
   Local<Object> v8Object = Nan::New<Object>();
   v8Object->Set(Nan::New("key").ToLocalChecked(), Nan::New("value").ToLocalChecked());
   v8Object->Set(1, Nan::New("num").ToLocalChecked());
+  v8Object->Set(Nan::New("arr").ToLocalChecked(), v8Array);
 
   info.GetReturnValue().Set(v8Object);
 }
