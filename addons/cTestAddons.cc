@@ -3,7 +3,10 @@
 
 #include <iostream>
 #include <vector>
-#include <pthread.h>
+
+#ifdef _WINDOWS_
+#include <time.h>
+#endif
 
 using namespace v8;
 
@@ -279,6 +282,9 @@ NAN_METHOD(ReturnJson)
   info.GetReturnValue().Set(v8Object);
 }
 
+#ifndef _WINDOWS_
+#include <pthread.h>
+
 int myGlobal = 0;
 pthread_mutex_t myMutex = PTHREAD_MUTEX_INITIALIZER;
 void *thread_function(void *arg)
@@ -338,6 +344,7 @@ NAN_METHOD(ReturnGlobal)
 
   info.GetReturnValue().Set(Nan::New<Object>());
 }
+#endif
 
 
 void Init(Local<Object> exports) {
@@ -349,8 +356,10 @@ void Init(Local<Object> exports) {
   Nan::SetMethod(exports, "returnNum", ReturnNumber);
   Nan::SetMethod(exports, "returnArr", ReturnArray);
   Nan::SetMethod(exports, "returnObj", ReturnJson);
+#ifndef _WINDOWS_
   Nan::SetMethod(exports, "runThread", RunThread);
   Nan::SetMethod(exports, "returnGlobal", ReturnGlobal);
+#endif
 }
 
 NODE_MODULE(addon, Init)
